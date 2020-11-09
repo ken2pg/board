@@ -1,0 +1,6 @@
+/backend/src/bin/*
+/backend/target/*
+*.db
+*.lock
+*.so
+*.o

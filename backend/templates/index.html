@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>App</title>
+</head>
+<body>
+    <div>
+        {% for comment in comments %}
+        <div>
+            <div>text: {{comment.text}} </div>
+            <div>id: {{comment.id}},name:{{comment.name}},email:{{comment.text}}</div>
+        </div>
+        {% endfor %}
+    </div>
+    <form action="/add" method="post">
+    <div>
+        <input name="text">
+    </div>
+    <div>
+        <button>add</button>
+    </div>
+    </form>
+</body>
+</html>
