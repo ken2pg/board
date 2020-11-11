@@ -1,6 +1,13 @@
-use actix_web::{get,App,HttpResponse,HttpServer,ResponseError};
+extern crate board;
+extern crate diesel;
+
+use actix_web::{http::header,post,get,web,App,HttpResponse,HttpServer,ResponseError};
 use askama::Template;
 use thiserror::Error;
+
+use self::diesel::prelude::*;
+use diesel::sqlite::SqliteConnection;
+use self::board::db_operations::*;
 
 #[derive(Debug)]
 struct Comment{
@@ -20,28 +27,12 @@ struct Wrapper{
 #[derive(Debug,Error)]
 enum WebError
 {
-    #[error("Failed!")]//derive(Error)すると、この書き方でprintln!()が実装できる。よってここでDisplayを導出している。
-    R2d2Error(#[from]r2d2::Error),
-
     #[error("Failed!")]
     AskamaError(#[from]askama::Error),
 }
 
 impl ResponseError for WebError {}//serviceにわたす関数の返り値はResponse Errorトレイトを実装している必要がある。
 
-
-#[actix_rt::main]
-async fn main()->Result<(),actix_web::Error> {
-    HttpServer::new(move || {
-        App::new()
-            .service(index)
-    })
-    .bind("0.0.0.0:8080")?
-    .run()
-    .await?;
-
-    Ok(())
-}
 
 #[get("/")]
 async fn index() -> Result<HttpResponse,WebError>{
@@ -64,3 +55,20 @@ async fn index() -> Result<HttpResponse,WebError>{
         .content_type("text/html")//HTTPレスポンスヘッダを参照
         .body(response_body))//receive ResponseBuilder and create Response
 }
+
+#[actix_rt::main]
+async fn main()->Result<(),actix_web::Error> {
+
+    let conn = establish_connection();
+
+    HttpServer::new(move || {
+        App::new()
+            .route("/", web::get().to(index))
+    })
+    .bind("0.0.0.0:8080")?
+    .run()
+    .await?;
+
+    Ok(())
+}
+
