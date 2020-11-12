@@ -1,0 +1,25 @@
+.Board {
+  .CardComponent {
+    margin: 0 auto;
+    margin-top: 30px;
+  }
+  .cardTitle {
+    font-size: 28px;
+    font-weight: 600;
+    color: rgba($color: #757575, $alpha: 1);
+  }
+  .cardDetail {
+    font-size: 18px;
+    color: rgba($color: #757575, $alpha: 1);
+  }
+  .PostButton {
+    margin-top: 20px;
+    width: 80px;
+  }
+  .boardContent {
+    margin: 20px 0px;
+  }
+  hr {
+    border-top: 1px solid rgb(170, 170, 170);
+  }
+}
