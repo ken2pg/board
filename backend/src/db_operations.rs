@@ -36,8 +36,7 @@ pub fn create_post<'a>(conn: &SqliteConnection,name: &'a str,body: &'a str,hobby
 
 pub fn read_post(conn: &SqliteConnection,number :i64)
 {
-    use super::schema::posts::dsl::*;
-
+    use super::schema::posts::dsl::posts;
     let results = posts.limit(number)
     .load::<Post>(conn)// result into Post
     .expect("Error loading posts");
@@ -45,32 +44,27 @@ pub fn read_post(conn: &SqliteConnection,number :i64)
     println!("Taking {} posts!", results.len());
 
     for post in results {
-        println!("hobby:{}", post.body);
-        println!("email:{}", post.body);
         println!("name:{}", post.name);
+        println!("hobby:{}", post.hobby.unwrap());
+        println!("email:{}", post.email.unwrap());
         println!("body:{}", post.body);
     }
 }
 
-/*
-pub fn update_post<'a>(conn: &SqliteConnection,id: i32,new_body:&'a str ) {
-    diesel::update(posts.find(id))
-        .set()
-        .values(&new_post)
+pub fn update_post(conn: &SqliteConnection,target_id: i32,new_body:&str ) {
+    
+    use super::schema::posts::dsl::{body,posts};
+    diesel::update(posts.find(target_id))
+        .set(body.eq(new_body))
         .execute(conn)
         .expect("Error saving new post");
 }
-*/
 
 
-/*
-pub fn update_post<'a>(conn: &SqliteConnection,id: i32,new_body:&'a str ) {
-pub fn delete_post(conn: &SqliteConnection,delete_id :i64)
+pub fn delete_post(conn: &SqliteConnection,target_id :i32)
 {
-    use super::schema::posts::dsl::*;
-
-    diesel::delete(posts.find(id.filter(|i|i==delete_id)))
+    use super::schema::posts::dsl::{posts};
+    diesel::delete(posts.find(target_id))
         .execute(conn)
         .expect("Error deleting posts");
 }
-*/

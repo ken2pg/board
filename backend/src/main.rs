@@ -34,7 +34,6 @@ enum WebError
 impl ResponseError for WebError {}//serviceにわたす関数の返り値はResponse Errorトレイトを実装している必要がある。
 
 
-#[get("/")]
 async fn index() -> Result<HttpResponse,WebError>{
     let mut comments = Vec::new();
 

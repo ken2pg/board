@@ -4,3 +4,4 @@
 *.lock
 *.so
 *.o
+*.env
