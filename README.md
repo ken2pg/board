@@ -8,7 +8,7 @@ BBS
 
 # バックエンド側の起動のやり方
 
-`/backend`下で以下のコマンドを実行してください。`http://localhost:8080`にアクセスすればindex.htmlが表示されます。
+`./backend`下で以下のコマンドを実行してください。`http://localhost:8080`にアクセスすればindex.htmlが表示されます。
 
 ```
 $ cargo run --bin board
@@ -17,7 +17,7 @@ $ cargo run --bin board
 
 # コンテナで動かす場合
 
-Dockerfileのあるディレクトリでコンテナのイメージをビルドします。
+Dockerfileのあるディレクトリ(ルートディレクトリ)でコンテナのイメージをビルドします。
 
 ```
 $ docker build -t board .
