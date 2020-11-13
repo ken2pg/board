@@ -6,7 +6,7 @@ WORKDIR /board/backend
 COPY ./backend/Cargo.toml ./Cargo.toml
 COPY ./backend/src ./src
 COPY ./backend/templates ./templates
-COPY ./backend/migration ./migration
+COPY ./backend/migrations ./migrations
 # TODO Add write cmd for sql
 RUN cargo install diesel_cli --no-default-features --features sqlite && \
     echo DATABASE_URL=./board.db > .env && \ 
