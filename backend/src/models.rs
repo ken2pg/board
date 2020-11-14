@@ -1,6 +1,7 @@
 use super::schema::posts;
 
 #[derive(Queryable)]
+#[derive(Debug)]
 pub struct Post {
     pub id:i32,
     pub name:String,
