@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Button, Card, Modal, Form } from 'react-bootstrap';
-import '../Board.scss';
+import '../scss/Board.scss';
 
 const Board = () => {
   const [inputName, setInputName] = React.useState('');
@@ -9,9 +9,10 @@ const Board = () => {
   const [isOpenDialog, setIsOpenDialog] = React.useState(false);
   const [boardList, setBoardList] = React.useState([
     {
-      name: '匿名1',
+      name: '匿名',
       email: '',
-      contents: '',
+      contents:
+        'こんばんわ。\n\n最近dアニメに加入したのですが、皆さんどのようなアニメジャンルを見ていますか？\n\nジャンルとおすすめのアニメ教えてください！',
     },
   ]);
 
@@ -34,7 +35,9 @@ const Board = () => {
       <Card style={{ width: '90%' }} className="CardComponent">
         <Card.Body>
           <div className="cardTitle">好きなアニメのジャンルは？</div>
-          <div className="cardDetail">コメント数：{boardList.length}</div>
+          <div className="cardDetail">
+            コメント数：{boardList.length}　最終更新日：2020/11/12 18:40
+          </div>
           <Button
             className="PostButton"
             onClick={() => {
@@ -50,7 +53,7 @@ const Board = () => {
                 <div className="boardContent">
                   <p>
                     {index + 1}. {}
-                    {item.name}
+                    {item.name}さん
                   </p>
                   <p>{item.contents}</p>
                   <hr />
@@ -58,6 +61,14 @@ const Board = () => {
               );
             })}
           </div>
+          <Button
+            className="PostButton"
+            onClick={() => {
+              handleOpen();
+            }}
+          >
+            投稿
+          </Button>
         </Card.Body>
       </Card>
       <Modal show={isOpenDialog} onHide={handleClose}>
