@@ -44,6 +44,7 @@ const BoardContents: React.FC<Props> = ({ item, index, handleReplyDialogOpen }) 
               smooth={true}
               offset={0}
               duration={500}
+              className="replyId"
             >
               &gt;&gt;{item.replyId + 1} 返信元を見る
             </Link>
