@@ -25,3 +25,15 @@
     border-top: 1px solid rgb(170, 170, 170);
   }
 }
+.boardContent {
+  .topText {
+    display: flex;
+    justify-content: space-between;
+    .replyButton {
+      margin-bottom: -7px;
+      .RiReplyFill {
+        margin-bottom: 5px;
+      }
+    }
+  }
+}
