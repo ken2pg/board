@@ -55,7 +55,7 @@ const Board = () => {
 
   return (
     <div className="Board">
-      <Card style={{ width: '90%' }} className="CardComponent">
+      <Card className="CardComponent">
         <Card.Body>
           <div className="cardTitle">好きなアニメのジャンルは？</div>
           <div className="cardDetail">
