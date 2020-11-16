@@ -12,7 +12,6 @@ COPY ./backend/migrations ./migrations
 RUN cargo install diesel_cli --no-default-features --features sqlite && \
     echo DATABASE_URL=./board.db > .env && \ 
     diesel setup && \
-#    diesel migration generate create_posts 
     diesel migration run && \
     diesel migration redo 
 

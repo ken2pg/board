@@ -18,17 +18,9 @@ pub fn establish_connection() -> SqliteConnection {
                 CRUD
 */
 
-pub fn create_post<'a>(conn: &SqliteConnection,name: &'a str,body: &'a str,hobby:Option<&'a str> ,email:Option<&'a str> ) {
-
-    let new_post = NewPost {
-        name: name,
-        body: body,
-        hobby: hobby,
-        email: email,
-    };
-
+pub fn create_post(conn: &SqliteConnection,new_post: &NewPost){
     diesel::insert_into(posts::table)
-        .values(&new_post)
+        .values(new_post)
         .execute(conn)
         .expect("Error saving new post");
 }
