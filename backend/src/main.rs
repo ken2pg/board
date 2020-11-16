@@ -1,68 +1,69 @@
 extern crate board;
 extern crate diesel;
+extern crate serde_json;
 
 use actix_web::{http::header,post,get,web,App,HttpResponse,HttpServer,ResponseError};
-use askama::Template;
-use thiserror::Error;
-
-use self::diesel::prelude::*;
 use diesel::sqlite::SqliteConnection;
-use self::board::db_operations::*;
-
-#[derive(Debug)]
-struct Comment{
-    id: u32,
-    name: String,
-    email: String,
-    hobby: String,
-    text: String,
-}
-
-#[derive(Template)]
-#[template(path="index.html")]
-struct Wrapper{
-    comments:Vec<Comment>,
-}
-
-#[derive(Debug,Error)]
-enum WebError
-{
-    #[error("Failed!")]
-    AskamaError(#[from]askama::Error),
-}
-
-impl ResponseError for WebError {}//serviceにわたす関数の返り値はResponse Errorトレイトを実装している必要がある。
+use board::db_operations::*;
+use board::models::{Post,Add,NewPost,PostTemplate,WebError};
+use askama::Template;
 
 
+#[get("/")]
 async fn index() -> Result<HttpResponse,WebError>{
-    let mut comments = Vec::new();
+    let conn:SqliteConnection = establish_connection();
+    let _posts:Vec<Post> = read_post(&conn,10);
 
-    comments.push(
-        Comment{
-           id : 0,
-           name : "A".to_string(),
-           email : "example@example.com".to_string(),
-           hobby : "Atelier".to_string(),
-           text : "You must play Atelier.".to_string(),
-        }
-    );
-
-    let html=Wrapper{ comments };
+    let html = PostTemplate{comments : _posts};
     let response_body = html.render()?;
 
     Ok(HttpResponse::Ok()
-        .content_type("text/html")//HTTPレスポンスヘッダを参照
-        .body(response_body))//receive ResponseBuilder and create Response
+        .content_type("text/html")
+        .body(response_body))
+}
+
+#[post("/add")]
+async fn post_comment(info: web::Form<Add>) -> Result<HttpResponse,WebError>
+{
+    let conn:SqliteConnection = establish_connection();
+
+    let new_post = NewPost {
+        name: "名無しのアトリエ",
+        body: &info.text,
+        hobby: Some("アトリエ"),
+        email: Some("atelier@atelier.com"),
+    };
+
+    create_post(&conn,&new_post);
+
+    Ok(HttpResponse::SeeOther()
+        .header(header::LOCATION, "/")
+        .finish())
+}
+
+#[get("/test")]
+async fn generate_json() -> Result<HttpResponse,WebError>
+{
+    let json = serde_json::json!({
+        "text": "hello,world!",
+    });
+
+    Ok(HttpResponse::SeeOther()
+        .header(header::LOCATION, "/")
+        .content_type("text/json")
+        .body(json))
 }
 
 #[actix_rt::main]
 async fn main()->Result<(),actix_web::Error> {
 
-    let conn = establish_connection();
+    let conn:SqliteConnection = establish_connection();
 
     HttpServer::new(move || {
         App::new()
-            .route("/", web::get().to(index))
+            .service(index)
+            .service(post_comment)
+            .service(generate_json)
     })
     .bind("0.0.0.0:8080")?
     .run()
