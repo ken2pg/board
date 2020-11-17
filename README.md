@@ -8,6 +8,11 @@ BBS
 `npm i`を行い`node_modules`をインストールした後に、
 `npm start`を実行することで、フロント側を起動できる。
 
+```
+$ npm i
+$ npm start
+```
+
 # バックエンド側の起動のやり方
 
 `./backend`下で以下のコマンドを実行してください。`http://localhost:8080`にアクセスすれば index.html が表示されます。
