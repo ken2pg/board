@@ -7,6 +7,7 @@ COPY ./backend/Cargo.toml ./Cargo.toml
 COPY ./backend/src ./src
 COPY ./backend/templates ./templates
 COPY ./backend/migrations ./migrations
+
 # TODO Add write cmd for sql
 RUN cargo install diesel_cli --no-default-features --features sqlite && \
     echo DATABASE_URL=./board.db > .env && \ 
@@ -16,6 +17,5 @@ RUN cargo install diesel_cli --no-default-features --features sqlite && \
 
 RUN cargo build --release && \
     cargo install --path . 
-
 
 ENTRYPOINT [ "board" ] 

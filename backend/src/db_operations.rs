@@ -18,37 +18,32 @@ pub fn establish_connection() -> SqliteConnection {
                 CRUD
 */
 
-pub fn create_post<'a>(conn: &SqliteConnection,name: &'a str,body: &'a str,hobby:Option<&'a str> ,email:Option<&'a str> ) {
-
-    let new_post = NewPost {
-        name: name,
-        body: body,
-        hobby: hobby,
-        email: email,
-    };
-
+pub fn create_post(conn: &SqliteConnection,new_post: &NewPost){
     diesel::insert_into(posts::table)
-        .values(&new_post)
+        .values(new_post)
         .execute(conn)
         .expect("Error saving new post");
 }
 
 
-pub fn read_post(conn: &SqliteConnection,number :i64)
+pub fn read_post(conn: &SqliteConnection,number :i64) -> Vec<Post>
 {
     use super::schema::posts::dsl::posts;
+
     let results = posts.limit(number)
     .load::<Post>(conn)// result into Post
     .expect("Error loading posts");
 
     println!("Taking {} posts!", results.len());
 
-    for post in results {
-        println!("name:{}", post.name);
-        println!("hobby:{}", post.hobby.unwrap());
-        println!("email:{}", post.email.unwrap());
-        println!("body:{}", post.body);
+    for post in &results {
+        println!("name:{:?}", post.name);
+        println!("hobby:{:?}", post.hobby);
+        println!("email:{:?}", post.email);
+        println!("body:{:?}", post.body);
     }
+
+    return results;
 }
 
 pub fn update_post(conn: &SqliteConnection,target_id: i32,new_body:&str ) {
